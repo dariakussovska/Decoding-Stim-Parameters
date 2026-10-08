@@ -48,6 +48,32 @@ export KILOSORT_RESULTS_DIR=/path/to/kilosort_results
 export DERIVATIVE_DIR=/path/to/derivative
 ```
 
+## Included data files
+
+Two small derived files are committed here so the single-unit results can be
+inspected without the full dataset:
+
+- **`unit_quality_metrics.csv`** — one row per curated `good` / `mua` unit
+  (all subjects/sessions): spike count, firing rate, % of ISIs < 3 ms, CV2,
+  peak channel, and waveform SNR. `passes_isi_qc` marks `good` units with
+  ≤ 5% ISI violations.
+- **`isolated_units_spikes.mat`** — spike times for the 372 well-isolated
+  single units: units labeled `good` in phy with **< 5% of ISIs under 3 ms**.
+  Fields:
+  - `spikes` — 1×372 cell array; `spikes{i}` is a column vector of spike times
+    in seconds, relative to the start of that session's recording
+  - `subject`, `stim` — 1×372 cell arrays naming each unit's session
+  - `pct_isi_lt_3ms`, `firing_rate_hz` — per-unit metrics (same values as the CSV)
+  - `isi_violation_max_pct` — the ISI cutoff used (5)
+
+  ```matlab
+  S = load('isolated_units_spikes.mat');
+  S.spikes{1}, S.subject{1}, S.stim{1}
+  ```
+
+  Each session was sorted independently, so the same neuron may appear once
+  per session it was recorded in.
+
 ## Setup
 
 ```bash
